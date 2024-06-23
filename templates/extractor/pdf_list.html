@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .pdf-item {
+            background-color: #f4f4f4;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .pdf-meta {
+            margin-bottom: 10px;
+        }
+        .holdings {
+            margin-top: 10px;
+        }
+        .holding {
+            background-color: #ecf0f1;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+        }
+        .upload-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .upload-link:hover {
+            background-color: #2980b9;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination a, .pagination span {
+            margin: 0 5px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .pagination a:hover {
+            background-color: #2980b9;
+        }
+        .pagination .current {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your PDFs</h1>
+    {% for item in pdf_data %}
+        <div class="pdf-item">
+            <div class="pdf-meta">
+                <h2>{{ item.pdf.title }}</h2>
+                <p>Uploaded on: {{ item.pdf.uploaded_at }}</p>
+            </div>
+            {% if item.content %}
+                {% if item.content.error %}
+                    <p style="color: red;">Error: {{ item.content.error }}</p>
+                    <p>Details: {{ item.content.details }}</p>
+                {% else %}
+                    <h3>Account Owner: {{ item.content.account_owner }}</h3>
+                    <p>Portfolio Value: ${{ item.content.portfolio_value }}</p>
+                    <div class="holdings">
+                        <h3>Holdings:</h3>
+                        {% for holding in item.content.holdings %}
+                            <div class="holding">
+                                <p><strong>{{ holding.name }}</strong></p>
+                                <p>Cost Basis: ${{ holding.cost_basis }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <p>No extracted content available.</p>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No PDFs uploaded yet.</p>
+    {% endfor %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% else %}
+            <span>&laquo; first</span>
+            <span>previous</span>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% else %}
+            <span>next</span>
+            <span>last &raquo;</span>
+        {% endif %}
+    </div>
+    <a href="{% url 'upload_pdf' %}" class="upload-link">Upload a new PDF</a>
+</body>
+</html>

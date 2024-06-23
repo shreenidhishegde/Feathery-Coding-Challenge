@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Extracted Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .holdings {
+            margin-top: 20px;
+        }
+        .holding {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Extracted Data</h1>
+        <h2>Account Owner: {{ data.account_owner }}</h2>
+        <h2>Portfolio Value: ${{ data.portfolio_value }}</h2>
+        <div class="holdings">
+            <h3>Holdings:</h3>
+            {% for holding in data.holdings %}
+                <div class="holding">
+                    <p><strong>Name:</strong> {{ holding.name }}</p>
+                    <p><strong>Cost Basis:</strong> ${{ holding.cost_basis }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'upload_pdf' %}">Upload another PDF</a>
+    </div>
+</body>
+</html>

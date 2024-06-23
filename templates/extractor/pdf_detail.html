@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ pdf.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .meta {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .holdings {
+            margin-top: 20px;
+        }
+        .holding {
+            background-color: #ecf0f1;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .holding h3 {
+            margin-top: 0;
+            color: #34495e;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ pdf.title }}</h1>
+    <div class="meta">
+        <p><strong>Uploaded on:</strong> {{ pdf.uploaded_at }}</p>
+    </div>
+    <h2>Extracted Content:</h2>
+    {% with extracted_data=content.content|safe %}
+        {% if extracted_data %}
+            {% with json_data=extracted_data|json_script:"pdf-data" %}
+                <script>
+                    const pdfData = JSON.parse(document.getElementById('pdf-data').textContent);
+                    const response = JSON.parse(pdfData.response.replace(/```json\n|\n```/g, ''));
+                    
+                    document.write(`
+                        <h3>Account Owner: ${response.account_owner}</h3>
+                        <h3>Portfolio Value: $${response.portfolio_value.toFixed(2)}</h3>
+                        <div class="holdings">
+                            <h3>Holdings:</h3>
+                            ${response.holdings.map(holding => `
+                                <div class="holding">
+                                    <h3>${holding.name}</h3>
+                                    <p><strong>Cost Basis:</strong> $${holding.cost_basis.toFixed(2)}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `);
+                </script>
+            {% endwith %}
+        {% else %}
+            <p>No extracted content available.</p>
+        {% endif %}
+    {% endwith %}
+    <a href="{% url 'pdf_list' %}" class="back-link">Back to PDF list</a>
+</body>
+</html>
