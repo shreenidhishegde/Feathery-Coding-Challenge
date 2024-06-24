@@ -79,12 +79,6 @@ def pdf_list(request):
 
     return render(request, 'extractor/pdf_list.html', {'pdf_data': pdf_data, 'page_obj': page_obj})
 
-@login_required
-def pdf_detail(request, pk):
-    pdf = get_object_or_404(PDFDocument, pk=pk, user=request.user)
-    extracted_content = get_object_or_404(ExtractedContent, pdf_document=pdf)
-    return render(request, 'extractor/pdf_detail.html', {'pdf': pdf, 'content': extracted_content})
-
 
 def logout_view(request):
     logout(request)
