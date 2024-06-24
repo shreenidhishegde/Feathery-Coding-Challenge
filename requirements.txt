@@ -1,0 +1,27 @@
+annotated-types==0.7.0
+anyio==4.4.0
+asgiref==3.8.1
+backports.zoneinfo @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_4ampz1_6cv/croots/recipe/backports.zoneinfo_1661287537252/work
+certifi==2024.6.2
+distro==1.9.0
+Django==4.2.13
+django-rest-framework==0.1.0
+djangorestframework==3.15.2
+exceptiongroup==1.2.1
+h11==0.14.0
+httpcore==1.0.5
+httpx==0.27.0
+idna==3.7
+mysqlclient==2.2.4
+openai==1.35.3
+pdf2image==1.17.0
+pillow==10.3.0
+pydantic==2.7.4
+pydantic_core==2.18.4
+PyMuPDF==1.24.5
+PyMuPDFb==1.24.3
+python-dotenv==1.0.1
+sniffio==1.3.1
+sqlparse @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_cb77ukgrpu/croot/sqlparse_1690901947630/work
+tqdm==4.66.4
+typing_extensions==4.12.2

@@ -41,13 +41,16 @@ def extract_data_from_pdf(file_path):
     # for i, img_str in enumerate(image_data):
     #     prompt += f"Image {i+1}: (base64 encoded)\n{img_str}\n\n"
 
-    completion = client.chat.completions.create(
-    model="gpt-4o",
-    temperature=0,
-    messages=[
-        {"role": "user", "content": prompt}
-    ]
-    )
+    try:
+        completion = client.chat.completions.create(
+            model="gpt-4o",
+            temperature=0,
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+    except Exception as e:
+        return {'error': f"Failed to get completion from language model: {str(e)}"}
 
     # Parse response 
     response_text = completion.choices[0].message.content.strip()
