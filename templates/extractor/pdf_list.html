@@ -27,7 +27,9 @@
                         {% for holding in item.content.holdings %}
                             <div class="holding">
                                 <p><strong>{{ holding.name }}</strong></p>
-                                <p>Cost Basis: ${{ holding.cost_basis }}</p>
+                                {% if holding.cost_basis %}
+                                    <p>Cost Basis: ${{ holding.cost_basis }}</p>
+                                {% endif %}
                             </div>
                         {% endfor %}
                     </div>
@@ -39,27 +41,31 @@
     {% empty %}
         <p>No PDFs uploaded yet.</p>
     {% endfor %}
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-        {% else %}
-            <span>&laquo; first</span>
-            <span>previous</span>
-        {% endif %}
 
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-        </span>
+    {% if pdf_data %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% else %}
+                <span>&laquo; first</span>
+                <span>previous</span>
+            {% endif %}
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% else %}
-            <span>next</span>
-            <span>last &raquo;</span>
-        {% endif %}
-    </div>
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% else %}
+                <span>next</span>
+                <span>last &raquo;</span>
+            {% endif %}
+        </div>
+    {% endif %}
+
     <a href="{% url 'upload_pdf' %}" class="upload-link">Upload a new PDF</a>
 </body>
 </html>
