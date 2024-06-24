@@ -54,9 +54,6 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'extractor/login.html', {'form': form})
 
-@login_required
-def home(request):
-    return render(request, 'extractor/home.html')
 
 @login_required
 def pdf_list(request):
